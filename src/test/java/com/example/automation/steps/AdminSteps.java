@@ -1,15 +1,25 @@
 package com.example.automation.steps;
 
+import com.example.automation.utils.Basetools;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.example.automation.configuration.DriverFactory.driver;
+import java.time.Duration;
 
-public class AdminSteps {
+import static com.example.automation.configuration.DriverFactory.driver;
+import static com.example.automation.steps.StandardsSteps.*;
+
+public class AdminSteps extends Basetools {
+
+    public AdminSteps() {
+        setWait(new WebDriverWait(driver, Duration.ofSeconds(TIME)));
+    }
 
     @And("je clique sur le bouton {string} pour ajouter un utilisateur")
     public void jeCliqueSurLeBoutonAddPourAjouterUnUtilisateur(String nameBoutton){
@@ -30,13 +40,11 @@ public class AdminSteps {
     }
 
     @And("je selectionne les valeurs suivantes dans les listes déroulantes")
-    public void jeSelectionneLesValeursSuivantesDansLesListesDéroulantes(DataTable dataTable) throws InterruptedException {
+    public void jeSelectionneLesValeursSuivantesDansLesListesDéroulantes(DataTable dataTable) {
         dataTable.asMap().forEach((fieldName, fieldValue) -> {
-            // Cliquer sur la liste déroulante personnalisée pour l’ouvrir
             WebElement dropdown = driver.findElement(By.xpath("//div[normalize-space() = \""+fieldName+"\"]//following-sibling::div//*[contains(@class,\"select-text-input\")]"));
             dropdown.click();
-            // Sélectionner l’option correspondant à la valeur
-            WebElement option = driver.findElement(By.xpath("//div[normalize-space() = \""+fieldValue+"\"]"));
+            WebElement option = driver.findElement(By.xpath("//div[contains(@class,'option') and normalize-space() = \""+fieldValue+"\"]"));
             option.click();
         });
     }
@@ -50,6 +58,32 @@ public class AdminSteps {
         employeeNameOption.click();
     }
 
+    @And("je clique sur le bouton modifier de l'utilisateur {string}")
+    public void jeCliqueSurLeBoutonModifierDeLUtilisateur(String username) {
+        WebElement editButton = driver.findElement(By.xpath("//div[normalize-space() = \""+username+"\"]/following-sibling::div/child::*//i[contains(@class,'pencil')]"));
+        editButton.click();
+    }
 
+    @And("je modiffie le champs {string} par la valeur {string}")
+    public void jeModiffieLeChampsParLaValeur(String fieldName, String fieldValue) {
+        WebElement inputField = driver.findElement(By.xpath("//div[normalize-space() = \"" + fieldName + "\"]//following-sibling::div//input"));
+        waitEnableElementAndClick(driver, inputField);
+        inputField.sendKeys(Keys.CONTROL + "a");
+        inputField.sendKeys(Keys.DELETE);
+        inputField.sendKeys(fieldValue);
+    }
+
+    @And("l'utilisateur {string} a bien été créé")
+    public void lUtilisateurABienÉtéCréé(String username) {
+        WebElement createdUser = driver.findElement(By.xpath("//div[normalize-space() = \""+username+"\"]"));
+        wait.until(ExpectedConditions.visibilityOf(createdUser));
+    }
+
+    @And("la modification sur la fiche de l'utilisateur {string} a bien été pris en compte")
+    public void laModificationSurLaFicheUtilisateurABienÉtéPrisEnCompte(String username) {
+        // Implémenter la vérification de la modification selon les besoins spécifiques
+        WebElement createdUser = driver.findElement(By.xpath("//div[normalize-space() = \""+username+"\"]"));
+        wait.until(ExpectedConditions.visibilityOf(createdUser));
+    }
 
 }

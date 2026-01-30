@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
         },
         plugin = {"pretty", "html:target/cucumber-report.html"},
         monochrome = true,
-        tags = "@admin"
+        tags = "@login or @gestionUser or @creationUser"
 )
 public class TestRunner extends Hooks {
 }

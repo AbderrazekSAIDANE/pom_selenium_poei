@@ -16,12 +16,12 @@ import static com.example.automation.configuration.DriverFactory.driver;
 public class Basetools {
     public static final Logger log = LoggerFactory.getLogger(Basetools.class);
 
-    protected static final int TIME = 100;
+    protected static final int TIME = 40;
 
 
     // public pour que la class watcher et json_watcher puisse y acceder
     public File screenshotFile;
-    private WebDriverWait wait;
+    public WebDriverWait wait;
 
 
     public void setWait(WebDriverWait wait) {

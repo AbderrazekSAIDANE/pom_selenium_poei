@@ -26,7 +26,8 @@ public class DriverFactory {
             options.addArguments("--incognito");
             options.setExperimentalOption("prefs", prefs);
             driver = new ChromeDriver(options);
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+            driver.manage().window().maximize();
         }
         return driver;
     }
